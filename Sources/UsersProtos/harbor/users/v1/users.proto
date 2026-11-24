@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package harbor.users.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// A person as Harbor shows them: the id Auth gave their account, and the name they chose.
+message User {
+  string id = 1;
+  string display_name = 2;
+  google.protobuf.Timestamp creation_date = 3;
+}
+
+message GetUserRequest {}
+
+message CreateUserRequest {
+  string id = 1;
+  string display_name = 2;
+}
+
+// Users for people, through the gateway.
+service UserService {
+  // The caller's own: the token names the user, so no request names one.
+  rpc GetUser(GetUserRequest) returns (User);
+}
+
+// For other services and workers: callers are admitted by their certificates (auth-worker).
+service UserInternalService {
+  // Creates the user whose email address Auth has verified, under the id of their account; a repeat with
+  // the same id and name returns the user.
+  rpc CreateUser(CreateUserRequest) returns (User);
+}
