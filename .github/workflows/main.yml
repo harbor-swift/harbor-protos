@@ -1,0 +1,18 @@
+name: Main
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  library:
+    name: Library
+    uses: swift-microservices/ci/.github/workflows/library.yml@f7b645aee1e52546bccba2ac7ff3f7381d07b0ef  # 1.8.0
+    with:
+      linux_host_archs: '["aarch64"]'
+      linux_command: swift build -c release
