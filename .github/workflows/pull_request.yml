@@ -18,3 +18,6 @@ jobs:
     with:
       linux_host_archs: '["aarch64"]'
       linux_command: swift build -c release
+      # SwiftPM can't build the baseline: its build plugin's protoc tools aren't built for it. buf's WIRE_JSON
+      # check guards the contracts instead (harbor-plan, Decisions).
+      api_breakage_check_enabled: false
